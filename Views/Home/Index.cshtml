@@ -1,0 +1,66 @@
+﻿
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <input type="file" id="DmFile1" name="DmFile1">
+        <button type="button" onclick="Upload();" class="btn btn-primary"> UPLOAD TO BASE 64!</button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+    async function Upload() {
+           
+        var fd = new FormData();
+
+        var File1 = document.querySelector('#DmFile1').files[0];
+        var f = await toBase64(File1);
+        fd.append('DmFile1', f);
+        fd.append('Name', File1.name);
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/UploadFile",
+            
+            processData: false,
+            contentType: false,
+            cache: false,
+            data: fd,
+
+            success: function (res) {
+                debugger;
+  
+
+                    $("#DmFile1").val("");
+ 
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                ShowError(errorThrown);
+      
+            }
+        });
+    }
+
+
+
+
+
+
+ 
+</script>
